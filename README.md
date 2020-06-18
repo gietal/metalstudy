@@ -1,0 +1,2 @@
+# metalstudy
+learning metal
