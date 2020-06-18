@@ -11,6 +11,7 @@
 		880E412D249B09E100F4283A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 880E412C249B09E100F4283A /* Assets.xcassets */; };
 		880E4130249B09E100F4283A /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 880E412E249B09E100F4283A /* MainMenu.xib */; };
 		880E4139249B0A2200F4283A /* MetalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 880E4138249B0A2200F4283A /* MetalView.swift */; };
+		880E413B249B12CE00F4283A /* Shaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = 880E413A249B12CE00F4283A /* Shaders.metal */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -21,6 +22,7 @@
 		880E4131249B09E100F4283A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		880E4132249B09E100F4283A /* study1.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = study1.entitlements; sourceTree = "<group>"; };
 		880E4138249B0A2200F4283A /* MetalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetalView.swift; sourceTree = "<group>"; };
+		880E413A249B12CE00F4283A /* Shaders.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Shaders.metal; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -59,6 +61,7 @@
 				880E4131249B09E100F4283A /* Info.plist */,
 				880E4132249B09E100F4283A /* study1.entitlements */,
 				880E4138249B0A2200F4283A /* MetalView.swift */,
+				880E413A249B12CE00F4283A /* Shaders.metal */,
 			);
 			path = study1;
 			sourceTree = "<group>";
@@ -133,6 +136,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				880E413B249B12CE00F4283A /* Shaders.metal in Sources */,
 				880E4139249B0A2200F4283A /* MetalView.swift in Sources */,
 				880E412B249B09E000F4283A /* AppDelegate.swift in Sources */,
 			);

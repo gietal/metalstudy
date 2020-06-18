@@ -20,6 +20,7 @@ class MetalView: MTKView {
             return
         }
         
+        // MTLRenderPassDescriptor is sort of like render target
         guard let rpd = currentRenderPassDescriptor else {
             print("render pass descriptor is nil")
             return
@@ -29,17 +30,6 @@ class MetalView: MTKView {
             print("drawable is nil")
             return
         }
-        
-        let vertex_data:[Float] = [-1.0, -1.0, 0.0, 1.0,
-                                    1.0, -1.0, 0.0, 1.0,
-                                    0.0,  1.0, 0.0, 1.0]
-        let data_size = vertex_data.count * MemoryLayout<Float>.size
-        let vertex_buffer = device.makeBuffer(bytes: vertex_data, length: data_size, options: [])
-        
-        // make shader programmatically
-        let library = device.makeDefaultLibrary()!
-        let vertex_func = library.makeFunction(name: "vertex_func")
-        let frag_func = library.makeFunction(name: "fragment_func")
         
         // create clear color
         let bleen = MTLClearColor(red: 0, green: 0.5, blue: 0.5, alpha: 1)
@@ -59,11 +49,45 @@ class MetalView: MTKView {
             return
         }
         
-        // translate metal commands to gpu commands
+        // encoder translates metal commands to gpu commands
+        // this encoder will put the commands to draw to the render pass specified
         guard let encoder = commandBuffer.makeRenderCommandEncoder(descriptor: rpd) else {
             print("failed to make render command encoder")
             return
         }
+        
+        
+        // triangle in screen coordinate [(-1, -1), (1, 1)]
+        let vertex_data:[Float] = [-1.0, -1.0, 0.0, 1.0,
+                                    1.0, -1.0, 0.0, 1.0,
+                                    0.0,  1.0, 0.0, 1.0]
+        let data_size = vertex_data.count * MemoryLayout<Float>.size
+        let vertex_buffer = device.makeBuffer(bytes: vertex_data, length: data_size, options: [])
+        
+        // find the shader funcs from all our metal files
+        let library = device.makeDefaultLibrary()!
+        let vertex_func = library.makeFunction(name: "vertex_func")
+        let frag_func = library.makeFunction(name: "fragment_func")
+        
+        // create descriptor to make MTLRenderPipelineState
+        // specify the shader functions and pixel format
+        let rpld = MTLRenderPipelineDescriptor()
+        rpld.vertexFunction = vertex_func
+        rpld.fragmentFunction = frag_func
+        rpld.colorAttachments[0].pixelFormat = .bgra8Unorm
+        
+        // MTLRenderPipelineState contains all the graphics function and configs
+        // to be used in a render pass
+        let rps = try! device.makeRenderPipelineState(descriptor: rpld)
+        
+        // set the state for this rendering
+        encoder.setRenderPipelineState(rps)
+        encoder.setVertexBuffer(vertex_buffer, offset: 0, index: 0)
+        
+        // then draw
+        encoder.drawPrimitives(type: .triangle, vertexStart: 0, vertexCount: 3, instanceCount: 1)
+        
+        // done
         encoder.endEncoding()
         commandBuffer.present(drawable)
         commandBuffer.commit()
